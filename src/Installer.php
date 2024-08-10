@@ -13,6 +13,9 @@ use IfCastle\OsUtilities\Safe;
 
 final class Installer               extends LibraryInstaller
 {
+    public const string PREFIX        = '  - ';
+    public const string IFCASTLE      = '<bg=bright-blue;options=bold> IfCastle </>';
+    
     #[\Override]
     public function supports(string $packageType)
     {
@@ -33,7 +36,7 @@ final class Installer               extends LibraryInstaller
             $packageInstaller       = $this->instanciatePackageInstaller($extraConfig['ifcastle-installer'], $package);
             
             $packageInstaller->install();
-            $this->io->write("IfCastle installed package: {$package->getName()}");
+            $this->io->write(self::PREFIX .self::IFCASTLE. " installed package: <info>{$package->getName()}</info>");
         });
     }
     
@@ -55,7 +58,7 @@ final class Installer               extends LibraryInstaller
             $packageInstaller       = $this->instanciatePackageInstaller($extraConfig['ifcastle-installer'], $target);
             
             $packageInstaller->update();
-            $this->io->write("IfCastle updated package: {$target->getName()}");
+            $this->io->write(self::PREFIX .self::IFCASTLE. " updated package: <info>{$target->getName()}</info>");
         });
     }
     
@@ -72,7 +75,7 @@ final class Installer               extends LibraryInstaller
         
         try {
             $packageInstaller->uninstall();
-            $this->io->write("IfCastle uninstalled package: {$package->getName()}");
+            $this->io->write(self::PREFIX .self::IFCASTLE. " uninstalled package: <info>{$package->getName()}</info>");
         } catch (PackageNotFound) {
         }
         
