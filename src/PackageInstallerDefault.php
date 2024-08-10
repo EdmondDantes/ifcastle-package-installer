@@ -13,7 +13,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
     private array $config           = [];
     private string $packageName      = '';
     
-    public function __construct(private BootManagerInterface $bootManager, private ZeroContextInterface $zeroContext) {}
+    public function __construct(private readonly BootManagerInterface $bootManager, private readonly ZeroContextInterface $zeroContext) {}
 
     public function setConfig(array $config, string $packageName): self
     {
