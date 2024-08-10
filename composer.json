@@ -16,6 +16,6 @@
     "composer/composer": "^2.0"
   },
   "extra": {
-    "class": "Plugin"
+    "class": "IfCastle\\PackageInstaller\\Plugin"
   }
 }
