@@ -20,6 +20,10 @@ final class PackageInstallerDefault implements PackageInstallerInterface
         $this->config               = $config;
         $this->packageName          = $packageName;
         
+        if(!empty($config[self::PACKAGE]) && !empty($config[self::PACKAGE]['name'])) {
+            $this->packageName      = $config[self::PACKAGE]['name'];
+        }
+        
         return $this;
     }
     
