@@ -1,0 +1,21 @@
+{
+  "name": "ifcastle/package-installer",
+  "type": "composer-plugin",
+  "license": "MIT",
+  "keywords": ["ifcastle", "package", "installer", "composer", "plugin"],
+  "autoload": {
+    "psr-4": {
+      "IfCastle\\PackageInstaller\\": "src/"
+    }
+  },
+  "require": {
+    "composer-plugin-api": "^2.0",
+    "ifcastle/application": "^0.5.7"
+  },
+  "require-dev": {
+    "composer/composer": "^2.0"
+  },
+  "extra": {
+    "class": "Plugin"
+  }
+}
