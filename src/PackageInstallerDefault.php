@@ -8,6 +8,8 @@ use IfCastle\Application\Bootloader\Builder\ZeroContextInterface;
 
 final class PackageInstallerDefault implements PackageInstallerInterface
 {
+    public const string PACKAGE     = 'package';
+    
     private array $config           = [];
     private string $packageName      = '';
     
@@ -26,16 +28,16 @@ final class PackageInstallerDefault implements PackageInstallerInterface
     {
         $installerConfig            = $this->config;
         
-        if(!empty($installerConfig['bootloader'])) {
+        if(!empty($installerConfig[self::PACKAGE])) {
             
-            if(empty($installerConfig['bootloader']['bootloaders'])) {
+            if(empty($installerConfig[self::PACKAGE]['bootloaders'])) {
                 throw new \RuntimeException("Bootloaders not found in installer config for package {$this->packageName}");
             }
             
             $this->bootManager->addBootloader(
                 $this->packageName,
-                $installerConfig['bootloader']['bootloaders'],
-                !empty($installerConfig['bootloader']['for_applications']) ? $installerConfig['bootloader']['for_applications'] : []
+                $installerConfig[self::PACKAGE]['bootloaders'],
+                !empty($installerConfig[self::PACKAGE]['for_applications']) ? $installerConfig[self::PACKAGE]['for_applications'] : []
             );
         }
     }
@@ -43,12 +45,12 @@ final class PackageInstallerDefault implements PackageInstallerInterface
     #[\Override]
     public function update(): void
     {
-        // TODO: Implement update() method.
+        $this->install();
     }
     
     #[\Override]
     public function uninstall(): void
     {
-        // TODO: Implement uninstall() method.
+        $this->bootManager->removeBootloader($this->packageName);
     }
 }
