@@ -8,6 +8,8 @@ use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 use IfCastle\Application\Bootloader\BootManager\BootManagerByDirectory;
 use IfCastle\Application\Bootloader\BootManager\BootManagerInterface;
+use IfCastle\Application\Bootloader\BootManager\Exceptions\PackageNotFound;
+use IfCastle\OsUtilities\Safe;
 
 final class Installer               extends LibraryInstaller
 {
@@ -68,8 +70,11 @@ final class Installer               extends LibraryInstaller
         
         $packageInstaller           = $this->instanciatePackageInstaller($extraConfig['ifcastle-installer'], $package);
         
-        $packageInstaller->uninstall();
-        $this->io->write("IfCastle uninstalled package: {$package->getName()}");
+        try {
+            $packageInstaller->uninstall();
+            $this->io->write("IfCastle uninstalled package: {$package->getName()}");
+        } catch (PackageNotFound) {
+        }
         
         parent::uninstall($repo, $package);
     }
@@ -106,13 +111,22 @@ final class Installer               extends LibraryInstaller
     
     private function instanciateBootManager(): BootManagerInterface
     {
-        $projectDir                 = $this->getProjectDir();
-        $bootManagerFile            = $projectDir . '/boot-manager.php';
+        $bootloaderDir              = $this->getProjectDir().'/bootloader';
+        
+        if(!is_dir($bootloaderDir)) {
+            Safe::execute(fn() => mkdir($bootloaderDir));
+        }
+        
+        if(!is_dir($bootloaderDir)) {
+            throw new \RuntimeException('Bootloader directory is not exist: '.$bootloaderDir);
+        }
+        
+        $bootManagerFile            = $bootloaderDir . '/boot-manager.php';
         
         if(file_exists($bootManagerFile)) {
             return include $bootManagerFile;
         } else {
-            return new BootManagerByDirectory($projectDir);
+            return new BootManagerByDirectory($bootloaderDir);
         }
     }
 }

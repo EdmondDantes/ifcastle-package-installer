@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d733cb3cb493651899e85eda84033e4",
+    "content-hash": "2385ec76faa461717c40c12acacd2497",
     "packages": [
         {
             "name": "ifcastle/application",
-            "version": "v0.5.7",
+            "version": "v0.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/application.git",
-                "reference": "6e2eb8d24a8862c1c3a0112da82f27ba199636fb"
+                "reference": "cf75e8adb727a413e163f306101ece5e138f107e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/6e2eb8d24a8862c1c3a0112da82f27ba199636fb",
-                "reference": "6e2eb8d24a8862c1c3a0112da82f27ba199636fb",
+                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/cf75e8adb727a413e163f306101ece5e138f107e",
+                "reference": "cf75e8adb727a413e163f306101ece5e138f107e",
                 "shasum": ""
             },
             "require": {
@@ -31,9 +31,6 @@
                 "amphp/php-cs-fixer-config": "^2.1",
                 "friendsofphp/php-cs-fixer": "^3.60"
             },
-            "bin": [
-                "if-bootloader"
-            ],
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -52,9 +49,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/application/issues",
-                "source": "https://github.com/EdmondDantes/application/tree/v0.5.7"
+                "source": "https://github.com/EdmondDantes/application/tree/v0.5.9"
             },
-            "time": "2024-08-09T09:38:36+00:00"
+            "time": "2024-08-10T13:24:43+00:00"
         },
         {
             "name": "ifcastle/design-patterns",
