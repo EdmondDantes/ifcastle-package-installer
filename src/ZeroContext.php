@@ -21,4 +21,10 @@ readonly final class ZeroContext implements ZeroContextInterface
     {
         return '';
     }
+    
+    #[\Override]
+    public function getExecutionRoles(): array
+    {
+        return [];
+    }
 }
