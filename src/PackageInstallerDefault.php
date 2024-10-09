@@ -15,8 +15,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
     
     public function __construct(
         private readonly BootManagerInterface $bootManager,
-        private readonly ZeroContextInterface $zeroContext,
-        callable $applicationProvider
+        private readonly ZeroContextInterface $zeroContext
     ) {}
 
     public function setConfig(array $config, string $packageName): self

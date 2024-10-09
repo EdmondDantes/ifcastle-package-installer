@@ -17,19 +17,6 @@ final class Installer               extends LibraryInstaller
     public const string PREFIX        = '  - ';
     public const string IFCASTLE      = '<bg=bright-blue;options=bold> IfCastle </>';
     
-    private static ?ApplicationInterface $application = null;
-    
-    private static string $projectDir = '';
-    
-    public static function applicationProvider(): ApplicationInterface
-    {
-        if(null === self::$application) {
-            self::$application      = InstallerApplication::run(self::$projectDir, withEnd: false);
-        }
-        
-        return self::$application;
-    }
-    
     #[\Override]
     public function supports(string $packageType)
     {
@@ -98,11 +85,9 @@ final class Installer               extends LibraryInstaller
     
     private function instanciatePackageInstaller(array $installerConfig, PackageInterface $package): PackageInstallerInterface
     {
-        self::$projectDir           = $this->getProjectDir();
-        
         if(empty($installerConfig['installer-class'])) {
             return (new PackageInstallerDefault(
-                $this->instanciateBootManager(), new ZeroContext($this->getProjectDir()), self::applicationProvider(...))
+                $this->instanciateBootManager(), new ZeroContext($this->getProjectDir()))
             )->setConfig($installerConfig, $package->getName());
         }
         

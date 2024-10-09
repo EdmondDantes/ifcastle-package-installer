@@ -10,8 +10,7 @@ interface PackageInstallerInterface
 {
     public function __construct(
         BootManagerInterface $bootManager,
-        ZeroContextInterface $zeroContext,
-        callable $applicationProvider
+        ZeroContextInterface $zeroContext
     );
     
     public function install(): void;
