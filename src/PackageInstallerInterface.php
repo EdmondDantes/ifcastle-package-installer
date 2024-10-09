@@ -8,7 +8,11 @@ use IfCastle\Application\Bootloader\Builder\ZeroContextInterface;
 
 interface PackageInstallerInterface
 {
-    public function __construct(BootManagerInterface $bootManager, ZeroContextInterface $zeroContext);
+    public function __construct(
+        BootManagerInterface $bootManager,
+        ZeroContextInterface $zeroContext,
+        callable $applicationProvider
+    );
     
     public function install(): void;
     
