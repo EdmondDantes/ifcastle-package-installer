@@ -1,6 +1,7 @@
 {
   "name": "ifcastle/package-installer",
   "type": "composer-plugin",
+  "description": "A Composer plugin for install IfCastle components.",
   "license": "MIT",
   "keywords": ["ifcastle", "package", "installer", "composer", "plugin"],
   "autoload": {
