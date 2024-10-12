@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c19da4d80894894bc53f7331c061826",
+    "content-hash": "e9e172e969afef7d0745836eabdbc59a",
     "packages": [
         {
             "name": "ifcastle/application",
-            "version": "v0.6.12",
+            "version": "v0.6.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/application.git",
-                "reference": "78b59729fc4b41cc755fdd87bc489646d8d52d8f"
+                "reference": "bba70bf2b978de31f09574309a6e28dbe8699a93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/78b59729fc4b41cc755fdd87bc489646d8d52d8f",
-                "reference": "78b59729fc4b41cc755fdd87bc489646d8d52d8f",
+                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/bba70bf2b978de31f09574309a6e28dbe8699a93",
+                "reference": "bba70bf2b978de31f09574309a6e28dbe8699a93",
                 "shasum": ""
             },
             "require": {
@@ -50,9 +50,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/application/issues",
-                "source": "https://github.com/EdmondDantes/application/tree/v0.6.12"
+                "source": "https://github.com/EdmondDantes/application/tree/v0.6.13"
             },
-            "time": "2024-10-09T15:46:38+00:00"
+            "time": "2024-10-12T10:15:59+00:00"
         },
         {
             "name": "ifcastle/design-patterns",
@@ -240,16 +240,16 @@
         },
         {
             "name": "ifcastle/service-manager",
-            "version": "v0.5.8",
+            "version": "v0.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/service-manager.git",
-                "reference": "e3377efce65fa7b4b78a5d4bcd28bfa8a75b562c"
+                "reference": "154f4a45707ad6b6bd9710a6bdf9ae0f35074cb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/service-manager/zipball/e3377efce65fa7b4b78a5d4bcd28bfa8a75b562c",
-                "reference": "e3377efce65fa7b4b78a5d4bcd28bfa8a75b562c",
+                "url": "https://api.github.com/repos/EdmondDantes/service-manager/zipball/154f4a45707ad6b6bd9710a6bdf9ae0f35074cb3",
+                "reference": "154f4a45707ad6b6bd9710a6bdf9ae0f35074cb3",
                 "shasum": ""
             },
             "require": {
@@ -278,9 +278,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/service-manager/issues",
-                "source": "https://github.com/EdmondDantes/service-manager/tree/v0.5.8"
+                "source": "https://github.com/EdmondDantes/service-manager/tree/v0.5.10"
             },
-            "time": "2024-09-16T13:29:32+00:00"
+            "time": "2024-10-12T10:06:20+00:00"
         },
         {
             "name": "ifcastle/type-definitions",
