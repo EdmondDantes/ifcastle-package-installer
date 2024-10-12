@@ -6,7 +6,6 @@ namespace IfCastle\PackageInstaller;
 use Composer\Installer\LibraryInstaller;
 use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledRepositoryInterface;
-use IfCastle\Application\ApplicationInterface;
 use IfCastle\Application\Bootloader\BootManager\BootManagerByDirectory;
 use IfCastle\Application\Bootloader\BootManager\BootManagerInterface;
 use IfCastle\Application\Bootloader\BootManager\Exceptions\PackageNotFound;
