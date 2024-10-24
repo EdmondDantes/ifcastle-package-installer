@@ -97,8 +97,8 @@ final class PackageInstallerDefault implements PackageInstallerInterface
                 className    : $serviceConfig['class']      ?? throw new \RuntimeException("Service class is not found for service $serviceName"),
                 isActive     : $serviceConfig['isActive']   ?? false,
                 config       : $serviceConfig['config']     ?? [],
-                includeScopes: $serviceConfig['scopes']     ?? [],
-                excludeScopes: $serviceConfig['excludeScopes'] ?? []
+                includeTags  : $serviceConfig['tags']       ?? [],
+                excludeTags  : $serviceConfig['excludeTags']?? []
             );
             
             $serviceManager->installService($serviceDescriptor);
