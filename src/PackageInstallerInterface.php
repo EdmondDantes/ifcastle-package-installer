@@ -9,6 +9,26 @@ use IfCastle\Application\Bootloader\Builder\ZeroContextInterface;
 
 interface PackageInstallerInterface
 {
+    public const string PACKAGE     = 'package';
+
+    public const string SERVICES    = 'services';
+
+    public const string NAME        = 'name';
+
+    public const string IS_ACTIVE   = 'isActive';
+
+    public const string RUNTIME_TAGS = 'runtimeTags';
+
+    public const string EXCLUDE_TAGS = 'excludeTags';
+
+    public const string BOOTLOADERS  = 'bootloaders';
+
+    public const string APPLICATIONS = 'applications';
+
+    public const string GROUPS       = 'groups';
+
+    public const string GROUP        = 'group';
+
     public function __construct(
         BootManagerInterface $bootManager,
         ZeroContextInterface $zeroContext

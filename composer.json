@@ -9,6 +9,11 @@
       "IfCastle\\PackageInstaller\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "IfCastle\\PackageInstaller\\": "./tests"
+    }
+  },
   "require": {
     "composer-plugin-api": "^2.0",
     "ifcastle/application": "^0.7.3"
@@ -16,9 +21,14 @@
   "require-dev": {
     "composer/composer": "^2.0",
     "ifcastle/codestyle": "^0.1.7",
-    "phpstan/phpstan": "^1.12"
+    "phpstan/phpstan": "^1.12",
+    "phpunit/phpunit": "^11.4"
   },
   "extra": {
     "class": "IfCastle\\PackageInstaller\\Plugin"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit ./tests",
+    "analysis": "phpstan"
   }
 }

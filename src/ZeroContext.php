@@ -24,8 +24,14 @@ final readonly class ZeroContext implements ZeroContextInterface
     }
 
     #[\Override]
+    public function getRuntimeTags(): array
+    {
+        return ['installer', 'console'];
+    }
+
+    #[\Override]
     public function getExecutionRoles(): array
     {
-        return [];
+        return ['installer'];
     }
 }
