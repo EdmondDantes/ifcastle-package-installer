@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace IfCastle\PackageInstaller;
@@ -12,10 +13,10 @@ interface PackageInstallerInterface
         BootManagerInterface $bootManager,
         ZeroContextInterface $zeroContext
     );
-    
+
     public function install(): void;
-    
+
     public function update(): void;
-    
+
     public function uninstall(): void;
 }

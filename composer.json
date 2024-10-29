@@ -11,10 +11,12 @@
   },
   "require": {
     "composer-plugin-api": "^2.0",
-    "ifcastle/application": "^0.6.12"
+    "ifcastle/application": "^0.7.3"
   },
   "require-dev": {
-    "composer/composer": "^2.0"
+    "composer/composer": "^2.0",
+    "ifcastle/codestyle": "^0.1.7",
+    "phpstan/phpstan": "^1.12"
   },
   "extra": {
     "class": "IfCastle\\PackageInstaller\\Plugin"
