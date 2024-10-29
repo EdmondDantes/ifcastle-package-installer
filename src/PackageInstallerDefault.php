@@ -6,6 +6,8 @@ namespace IfCastle\PackageInstaller;
 
 use IfCastle\Application\Bootloader\BootManager\BootManagerInterface;
 use IfCastle\Application\Bootloader\Builder\ZeroContextInterface;
+use IfCastle\Application\EngineRolesEnum;
+use IfCastle\Application\Runner;
 use IfCastle\ServiceManager\ServiceDescriptor;
 
 final class PackageInstallerDefault implements PackageInstallerInterface
@@ -13,6 +15,22 @@ final class PackageInstallerDefault implements PackageInstallerInterface
     public const string PACKAGE     = 'package';
 
     public const string SERVICES    = 'services';
+
+    public const string NAME        = 'name';
+
+    public const string IS_ACTIVE   = 'isActive';
+
+    public const string RUNTIME_TAGS = 'runtimeTags';
+
+    public const string EXCLUDE_TAGS = 'excludeTags';
+
+    public const string BOOTLOADERS  = 'bootloaders';
+
+    public const string APPLICATIONS = 'applications';
+
+    public const string GROUPS       = 'groups';
+
+    public const string GROUP        = 'group';
 
     private array $config           = [];
 
@@ -30,8 +48,8 @@ final class PackageInstallerDefault implements PackageInstallerInterface
         $this->config               = $config;
         $this->packageName          = $packageName;
 
-        if (!empty($config[self::PACKAGE]) && !empty($config[self::PACKAGE]['name'])) {
-            $this->packageName      = $config[self::PACKAGE]['name'];
+        if (!empty($config[self::PACKAGE]) && !empty($config[self::PACKAGE][self::NAME])) {
+            $this->packageName      = $config[self::PACKAGE][self::NAME];
         }
 
         return $this;
@@ -44,15 +62,18 @@ final class PackageInstallerDefault implements PackageInstallerInterface
 
         if (!empty($installerConfig[self::PACKAGE])) {
 
-            if (empty($installerConfig[self::PACKAGE]['bootloaders'])) {
-                throw new \RuntimeException("Bootloaders not found in installer config for package {$this->packageName}");
+            if (!empty($installerConfig[self::PACKAGE][self::GROUPS])
+               && !empty($installerConfig[self::PACKAGE][self::BOOTLOADERS])) {
+                throw new \RuntimeException("Group and Bootloaders cannot be defined at the same time for package {$this->packageName}");
             }
 
-            $this->bootManager->addBootloader(
-                $this->packageName,
-                $installerConfig[self::PACKAGE]['bootloaders'],
-                empty($installerConfig[self::PACKAGE]['for_applications']) ? [] : $installerConfig[self::PACKAGE]['for_applications']
-            );
+            if (!empty($installerConfig[self::PACKAGE][self::GROUPS])) {
+                $this->installBootloaders($installerConfig[self::PACKAGE][self::GROUPS]);
+            } elseif (!empty($installerConfig[self::PACKAGE][self::BOOTLOADERS])) {
+                $this->installBootloaders([$installerConfig[self::PACKAGE]]);
+            } else {
+                throw new \RuntimeException("Bootloaders or Groups must be defined for package {$this->packageName}");
+            }
         }
 
         if (!empty($installerConfig[self::SERVICES]) && \is_array($installerConfig[self::SERVICES])) {
@@ -73,18 +94,45 @@ final class PackageInstallerDefault implements PackageInstallerInterface
             $this->uninstallServices($this->config[self::SERVICES]);
         }
 
-        $this->bootManager->removeBootloader($this->packageName);
+        $this->bootManager->removeComponent($this->packageName);
     }
-
+    
+    /**
+     * @throws \Throwable
+     */
     private function getInstaller(): InstallerApplication
     {
         if ($this->installerApplication === null) {
-            $this->installerApplication = InstallerApplication::run(
-                $this->zeroContext->getApplicationDirectory(), null, false
+
+            $runner                 = new Runner(
+                $this->zeroContext->getApplicationDirectory(),
+                InstallerApplication::APP_CODE,
+                InstallerApplication::class,
+                [EngineRolesEnum::CONSOLE->value]
             );
+
+            $this->installerApplication = $runner->run();
         }
 
         return $this->installerApplication;
+    }
+
+    private function installBootloaders(array $bootloaderGroups): void
+    {
+        $component                  = $this->bootManager->createComponent($this->packageName);
+
+        foreach ($bootloaderGroups as $group) {
+            $component->add(
+                bootloaders : $group[self::BOOTLOADERS],
+                applications: $group[self::APPLICATIONS] ?? [],
+                runtimeTags : $group[self::RUNTIME_TAGS] ?? [],
+                excludeTags : $group[self::EXCLUDE_TAGS] ?? [],
+                isActive    : $group[self::IS_ACTIVE] ?? true,
+                group       : $group[self::GROUP] ?? null
+            );
+        }
+
+        $this->bootManager->addComponent($component);
     }
 
     private function installServices(array $services): void
@@ -93,15 +141,15 @@ final class PackageInstallerDefault implements PackageInstallerInterface
 
         foreach ($services as $serviceConfig) {
 
-            $serviceName            = $serviceConfig['name'] ?? throw new \RuntimeException('Service name is not defined');
+            $serviceName            = $serviceConfig[Service::NAME] ?? throw new \RuntimeException('Service name is not defined');
 
             $serviceDescriptor      = new ServiceDescriptor(
                 serviceName  : $serviceName,
-                className    : $serviceConfig['class']      ?? throw new \RuntimeException("Service class is not found for service $serviceName"),
-                isActive     : $serviceConfig['isActive']   ?? false,
-                config       : $serviceConfig['config']     ?? [],
-                includeTags  : $serviceConfig['tags']       ?? [],
-                excludeTags  : $serviceConfig['excludeTags'] ?? []
+                className    : $serviceConfig[Service::CLASS_NAME]  ?? throw new \RuntimeException("Service class is not found for service $serviceName"),
+                isActive     : $serviceConfig[Service::IS_ACTIVE]   ?? false,
+                config       : $serviceConfig[Service::CONFIG]      ?? [],
+                includeTags  : $serviceConfig[Service::TAGS]        ?? [],
+                excludeTags  : $serviceConfig[Service::EXCLUDE_TAGS] ?? []
             );
 
             $serviceManager->installService($serviceDescriptor);
@@ -113,7 +161,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
         $serviceManager             = $this->getInstaller()->getServiceManager();
 
         foreach ($services as $serviceConfig) {
-            $serviceName            = $serviceConfig['name'] ?? '';
+            $serviceName            = $serviceConfig[Service::NAME] ?? '';
 
             if ($serviceName === '') {
                 continue;

@@ -1,5 +1,8 @@
 # IfCastle package installer
 
+This Composer plugin allows automatic configuration of `Bootloader` and `ServiceManager` for the 
+`IFCastle` framework.
+
 ## Installation
 
 To install the package, run the following command:
@@ -22,6 +25,9 @@ To use the package, add the following configuration to the `composer.json` file:
     "ifcastle-installer": {
       "package": {
         "name": "configurator",
+        "isActive": true,
+        "runtimeTags": ["tag1", "tag2"],
+        "excludeTags": ["tag3", "tag4"],
         "bootloaders": [
           "IfCastle\\Configurator\\ConfigApplication"
         ],
@@ -74,3 +80,37 @@ for which the specified `Bootloader` will be applied.
   to include the specified classes in the loading stage.
   * `excludeTags` - A list of tags that must not be defined at the application's startup for the Bootloader
   * `group` - A string that indicates the group name.
+
+## Install services
+
+Component may contain services that need to be registered with the ServiceManager. 
+In this case, use the following configuration in the composer.json file.
+
+```json
+{
+  "extra": {
+    "ifcastle-installer": {
+      "services": [
+        {
+          "name": "service1",
+          "isActive": true,
+          "class": "IfCastle\\Configurator\\Service1",
+          "config": {
+            "key1": "value1",
+            "key2": "value2"
+          },
+          "tags": ["tag1", "tag2"],
+          "excludeTags": ["tag3", "tag4"]
+        }
+      ]
+    }
+  }
+}
+```
+
+Nodes:
+
+* `services` - A list of services that contain the following fields:
+* `name` - Name of the service.
+* `isActive` - A boolean value that indicates whether the service is active.
+* `class` - Class name of the service.

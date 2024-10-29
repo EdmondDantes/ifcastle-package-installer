@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "ifcastle/application",
-            "version": "v0.7.3",
+            "version": "v0.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EdmondDantes/application.git",
-                "reference": "f8099259b6da9397d4da8887f6809f96228c6cbf"
+                "reference": "6c49eb4504dbc14d04141e1dbb8e1f3465f161fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/f8099259b6da9397d4da8887f6809f96228c6cbf",
-                "reference": "f8099259b6da9397d4da8887f6809f96228c6cbf",
+                "url": "https://api.github.com/repos/EdmondDantes/application/zipball/6c49eb4504dbc14d04141e1dbb8e1f3465f161fc",
+                "reference": "6c49eb4504dbc14d04141e1dbb8e1f3465f161fc",
                 "shasum": ""
             },
             "require": {
@@ -54,9 +54,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EdmondDantes/application/issues",
-                "source": "https://github.com/EdmondDantes/application/tree/v0.7.3"
+                "source": "https://github.com/EdmondDantes/application/tree/v0.7.4"
             },
-            "time": "2024-10-29T07:33:06+00:00"
+            "time": "2024-10-29T15:02:50+00:00"
         },
         {
             "name": "ifcastle/async-contracts",
