@@ -15,6 +15,7 @@ use IfCastle\OsUtilities\Safe;
 final class Installer extends LibraryInstaller
 {
     public const string PREFIX        = '  - ';
+
     public const string IFCASTLE      = '<bg=bright-blue;options=bold> IfCastle </>';
 
     #[\Override]
@@ -30,13 +31,14 @@ final class Installer extends LibraryInstaller
 
             $extraConfig            = $package->getExtra();
 
-            if (empty($extraConfig) || empty($extraConfig['ifcastle-installer'])) {
+            if ($extraConfig === [] || empty($extraConfig['ifcastle-installer'])) {
                 return;
             }
 
             $packageInstaller       = $this->instanciatePackageInstaller($extraConfig['ifcastle-installer'], $package);
 
             $packageInstaller->install();
+
             $this->io->write(self::PREFIX . self::IFCASTLE . " installed package: <info>{$package->getName()}</info>");
         });
     }
@@ -46,28 +48,29 @@ final class Installer extends LibraryInstaller
         InstalledRepositoryInterface $repo,
         PackageInterface             $initial,
         PackageInterface             $target
-    ) {
+    ): void {
         parent::update($repo, $initial, $target)->then(function () use ($initial, $target) {
 
             $extraConfig            = $target->getExtra();
 
-            if (empty($extraConfig) || empty($extraConfig['ifcastle-installer'])) {
+            if ($extraConfig === [] || empty($extraConfig['ifcastle-installer'])) {
                 return;
             }
 
             $packageInstaller       = $this->instanciatePackageInstaller($extraConfig['ifcastle-installer'], $target);
 
             $packageInstaller->update();
+
             $this->io->write(self::PREFIX . self::IFCASTLE . " updated package: <info>{$target->getName()}</info>");
         });
     }
 
     #[\Override]
-    public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
+    public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package): void
     {
         $extraConfig                = $package->getExtra();
 
-        if (empty($extraConfig) || empty($extraConfig['ifcastle-installer'])) {
+        if ($extraConfig === [] || empty($extraConfig['ifcastle-installer'])) {
             return;
         }
 
@@ -129,6 +132,7 @@ final class Installer extends LibraryInstaller
         if (\file_exists($bootManagerFile)) {
             return include $bootManagerFile;
         }
+
         return new BootManagerByDirectory($bootloaderDir);
 
     }

@@ -11,9 +11,11 @@ use IfCastle\ServiceManager\ServiceDescriptor;
 final class PackageInstallerDefault implements PackageInstallerInterface
 {
     public const string PACKAGE     = 'package';
+
     public const string SERVICES    = 'services';
 
     private array $config           = [];
+
     private string $packageName      = '';
 
     private InstallerApplication|null $installerApplication = null;
@@ -49,7 +51,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
             $this->bootManager->addBootloader(
                 $this->packageName,
                 $installerConfig[self::PACKAGE]['bootloaders'],
-                !empty($installerConfig[self::PACKAGE]['for_applications']) ? $installerConfig[self::PACKAGE]['for_applications'] : []
+                empty($installerConfig[self::PACKAGE]['for_applications']) ? [] : $installerConfig[self::PACKAGE]['for_applications']
             );
         }
 
