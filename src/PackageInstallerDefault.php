@@ -107,7 +107,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
         if ($isUpdate) {
             $component              = $this->bootManager->getComponent($this->packageName);
             // Remove all groups
-            foreach ($component->getGroups() as $groupId => $group) {
+            foreach (array_keys($component->getGroups()) as $groupId) {
                 $component->deleteGroup($groupId);
             }
         } else {
