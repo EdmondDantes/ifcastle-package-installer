@@ -38,33 +38,38 @@ final class PackageInstallerDefault implements PackageInstallerInterface
     #[\Override]
     public function install(): void
     {
+        $this->addOrUpdatePackage();
+    }
+
+    private function addOrUpdatePackage(bool $isUpdate = false): void
+    {
         $installerConfig            = $this->config;
 
         if (!empty($installerConfig[self::PACKAGE])) {
 
             if (!empty($installerConfig[self::PACKAGE][self::GROUPS])
-               && !empty($installerConfig[self::PACKAGE][self::BOOTLOADERS])) {
+                && !empty($installerConfig[self::PACKAGE][self::BOOTLOADERS])) {
                 throw new \RuntimeException("Group and Bootloaders cannot be defined at the same time for package {$this->packageName}");
             }
 
             if (!empty($installerConfig[self::PACKAGE][self::GROUPS])) {
-                $this->installBootloaders($installerConfig[self::PACKAGE][self::GROUPS]);
+                $this->addOrUpdateBootloaders($installerConfig[self::PACKAGE][self::GROUPS], $isUpdate);
             } elseif (!empty($installerConfig[self::PACKAGE][self::BOOTLOADERS])) {
-                $this->installBootloaders([$installerConfig[self::PACKAGE]]);
+                $this->addOrUpdateBootloaders([$installerConfig[self::PACKAGE]], $isUpdate);
             } else {
                 throw new \RuntimeException("Bootloaders or Groups must be defined for package {$this->packageName}");
             }
         }
 
         if (!empty($installerConfig[self::SERVICES]) && \is_array($installerConfig[self::SERVICES])) {
-            $this->installServices($installerConfig[self::SERVICES]);
+            $this->addOrUpdateServices($installerConfig[self::SERVICES], $isUpdate);
         }
     }
 
     #[\Override]
     public function update(): void
     {
-        $this->install();
+        $this->addOrUpdatePackage(true);
     }
 
     #[\Override]
@@ -76,7 +81,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
 
         $this->bootManager->removeComponent($this->packageName);
     }
-    
+
     /**
      * @throws \Throwable
      */
@@ -97,9 +102,17 @@ final class PackageInstallerDefault implements PackageInstallerInterface
         return $this->installerApplication;
     }
 
-    private function installBootloaders(array $bootloaderGroups): void
+    private function addOrUpdateBootloaders(array $bootloaderGroups, bool $isUpdate): void
     {
-        $component                  = $this->bootManager->createComponent($this->packageName);
+        if ($isUpdate) {
+            $component              = $this->bootManager->getComponent($this->packageName);
+            // Remove all groups
+            foreach ($component->getGroups() as $groupId => $group) {
+                $component->deleteGroup($groupId);
+            }
+        } else {
+            $component              = $this->bootManager->createComponent($this->packageName);
+        }
 
         foreach ($bootloaderGroups as $group) {
             $component->add(
@@ -112,10 +125,14 @@ final class PackageInstallerDefault implements PackageInstallerInterface
             );
         }
 
-        $this->bootManager->addComponent($component);
+        if ($isUpdate) {
+            $this->bootManager->updateComponent($component);
+        } else {
+            $this->bootManager->addComponent($component);
+        }
     }
 
-    private function installServices(array $services): void
+    private function addOrUpdateServices(array $services, bool $isUpdate): void
     {
         $serviceManager             = $this->getInstaller()->getServiceManager();
 
@@ -132,7 +149,11 @@ final class PackageInstallerDefault implements PackageInstallerInterface
                 excludeTags  : $serviceConfig[Service::EXCLUDE_TAGS] ?? []
             );
 
-            $serviceManager->installService($serviceDescriptor);
+            if ($isUpdate) {
+                $serviceManager->updateServiceConfig($serviceDescriptor);
+            } else {
+                $serviceManager->installService($serviceDescriptor);
+            }
         }
     }
 
