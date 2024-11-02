@@ -169,7 +169,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
             }
 
             try {
-                $serviceManager->uninstallService($serviceName);
+                $serviceManager->uninstallService($serviceName, $this->packageName);
             } catch (\Exception $exception) {
                 echo "Error uninstalling service $serviceName: {$exception->getMessage()}\n";
             }
