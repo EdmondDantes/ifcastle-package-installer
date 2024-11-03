@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1bc1e17c9a03ebf0df8af2f53bc394e",
+    "content-hash": "af032ed6162a7e4aae043b7226ee6e5d",
     "packages": [
         {
             "name": "ifcastle/application",

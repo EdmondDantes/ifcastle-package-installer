@@ -16,11 +16,11 @@
   },
   "require": {
     "composer-plugin-api": "^2.0",
-    "ifcastle/application": "^0.7.3"
+    "ifcastle/application": "^0.7"
   },
   "require-dev": {
     "composer/composer": "^2.0",
-    "ifcastle/codestyle": "^0.1.7",
+    "ifcastle/codestyle": "^0.1",
     "phpstan/phpstan": "^1.12",
     "phpunit/phpunit": "^11.4"
   },
