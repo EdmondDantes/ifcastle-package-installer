@@ -1,4 +1,4 @@
-# IfCastle package installer
+# IfCastle package installer [![PHP Composer](https://github.com/EdmondDantes/ifcastle-package-installer/actions/workflows/php.yml/badge.svg)](https://github.com/EdmondDantes/ifcastle-package-installer/actions/workflows/php.yml)
 
 This Composer plugin allows automatic configuration of `Bootloader` and `ServiceManager` for the 
 `IFCastle` framework.
