@@ -48,8 +48,8 @@ final class Installer extends LibraryInstaller
         InstalledRepositoryInterface $repo,
         PackageInterface             $initial,
         PackageInterface             $target
-    ): void {
-        parent::update($repo, $initial, $target)->then(function () use ($initial, $target) {
+    ) {
+        return parent::update($repo, $initial, $target)->then(function () use ($target) {
 
             $extraConfig            = $target->getExtra();
 
@@ -66,12 +66,12 @@ final class Installer extends LibraryInstaller
     }
 
     #[\Override]
-    public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package): void
+    public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
         $extraConfig                = $package->getExtra();
 
         if ($extraConfig === [] || empty($extraConfig['ifcastle-installer'])) {
-            return;
+            return null;
         }
 
         $packageInstaller           = $this->instanciatePackageInstaller($extraConfig['ifcastle-installer'], $package);
@@ -82,9 +82,15 @@ final class Installer extends LibraryInstaller
         } catch (PackageNotFound) {
         }
 
-        parent::uninstall($repo, $package);
+        return parent::uninstall($repo, $package);
     }
-
+    
+    /**
+     * @param array<mixed>              $installerConfig
+     * @param PackageInterface          $package
+     *
+     * @return PackageInstallerInterface
+     */
     private function instanciatePackageInstaller(array $installerConfig, PackageInterface $package): PackageInstallerInterface
     {
         if (empty($installerConfig['installer-class'])) {
@@ -134,6 +140,5 @@ final class Installer extends LibraryInstaller
         }
 
         return new BootManagerByDirectory($bootloaderDir);
-
     }
 }

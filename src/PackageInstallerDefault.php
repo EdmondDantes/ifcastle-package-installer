@@ -8,10 +8,14 @@ use IfCastle\Application\Bootloader\BootManager\BootManagerInterface;
 use IfCastle\Application\Bootloader\Builder\ZeroContextInterface;
 use IfCastle\Application\EngineRolesEnum;
 use IfCastle\Application\Runner;
+use IfCastle\Exceptions\UnexpectedValueType;
 use IfCastle\ServiceManager\ServiceDescriptor;
 
 final class PackageInstallerDefault implements PackageInstallerInterface
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $config           = [];
 
     private string $packageName      = '';
@@ -23,6 +27,11 @@ final class PackageInstallerDefault implements PackageInstallerInterface
         private readonly ZeroContextInterface $zeroContext
     ) {}
 
+    /**
+     * @param array<string, mixed> $config
+     *
+     * @return $this
+     */
     public function setConfig(array $config, string $packageName): self
     {
         $this->config               = $config;
@@ -96,18 +105,27 @@ final class PackageInstallerDefault implements PackageInstallerInterface
                 [EngineRolesEnum::CONSOLE->value]
             );
 
-            $this->installerApplication = $runner->run();
+            $application            = $runner->run();
+
+            if (false === $application instanceof InstallerApplication) {
+                throw new UnexpectedValueType('InstallerApplication', $application, InstallerApplication::class);
+            }
+
+            $this->installerApplication = $application;
         }
 
         return $this->installerApplication;
     }
 
+    /**
+     * @param array<array<string, mixed>> $bootloaderGroups
+     */
     private function addOrUpdateBootloaders(array $bootloaderGroups, bool $isUpdate): void
     {
         if ($isUpdate) {
             $component              = $this->bootManager->getComponent($this->packageName);
             // Remove all groups
-            foreach (array_keys($component->getGroups()) as $groupId) {
+            foreach (\array_keys($component->getGroups()) as $groupId) {
                 $component->deleteGroup($groupId);
             }
         } else {
@@ -132,6 +150,9 @@ final class PackageInstallerDefault implements PackageInstallerInterface
         }
     }
 
+    /**
+     * @param array<array<string, mixed>> $services
+     */
     private function addOrUpdateServices(array $services, bool $isUpdate): void
     {
         $serviceManager             = $this->getInstaller()->getServiceManager();
@@ -157,6 +178,9 @@ final class PackageInstallerDefault implements PackageInstallerInterface
         }
     }
 
+    /**
+     * @param array<array<string, mixed>> $services
+     */
     private function uninstallServices(array $services): void
     {
         $serviceManager             = $this->getInstaller()->getServiceManager();
