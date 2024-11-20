@@ -84,12 +84,10 @@ final class Installer extends LibraryInstaller
 
         return parent::uninstall($repo, $package);
     }
-    
+
     /**
      * @param array<mixed>              $installerConfig
-     * @param PackageInterface          $package
      *
-     * @return PackageInstallerInterface
      */
     private function instanciatePackageInstaller(array $installerConfig, PackageInterface $package): PackageInstallerInterface
     {

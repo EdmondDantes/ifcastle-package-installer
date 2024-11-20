@@ -15,6 +15,12 @@ interface PackageInstallerInterface
 
     public const string NAME        = 'name';
 
+    public const string MAIN_CONFIG = 'mainConfig';
+
+    public const string COMMENT     = 'comment';
+
+    public const string CONFIG      = 'config';
+
     public const string IS_ACTIVE   = 'isActive';
 
     public const string RUNTIME_TAGS = 'runtimeTags';

@@ -26,6 +26,21 @@ To use the package, add the following configuration to the `composer.json` file:
       "package": {
         "name": "configurator",
         "isActive": true,
+        "mainConfig": {
+          "section1": {
+            "comment": "This is a comment\nThe section of the main configuration file",
+            "config": {
+              "key1": "value1",
+              "key2": "value2"
+            }
+          },
+          "section2": {
+              "config": {
+              "key3": "value3",
+              "key4": "value4"
+              }
+          }
+        },
         "runtimeTags": ["tag1", "tag2"],
         "excludeTags": ["tag3", "tag4"],
         "bootloaders": [
@@ -68,6 +83,7 @@ or
 * `ifcastle-installer` - Name of an installer section.
 * `package` - Main package section.
 * `name` - Name of the package.
+* `mainConfig` - Main configuration section.
 * `bootloaders` - List of bootloader classes which will be added to the `Bootloader` zone.
 * `applications` - A list of strings, tags that indicate the type of application 
 for which the specified `Bootloader` will be applied.
@@ -80,6 +96,29 @@ for which the specified `Bootloader` will be applied.
   to include the specified classes in the loading stage.
   * `excludeTags` - A list of tags that must not be defined at the application's startup for the Bootloader
   * `group` - A string that indicates the group name.
+
+## Main configuration
+
+The application has a main configuration file, typically named `main.ini` or `main.toml`.
+Using the mainConfig section, you can define default configuration blocks 
+that will be added to the file by the installer if they are not already defined.
+
+Example:
+```json
+ "mainConfig": {
+          "section1": {
+            "comment": "This is a comment\nThe section of the main configuration file",
+            "config": {
+              "key1": "value1",
+              "key2": "value2"
+            }
+          }
+```
+
+Next keys are available:
+- `section` - A string that indicates the section name.
+- `comment` - A string that will be added as a comment to the configuration block.
+- `config` - An array of key-value pairs that will be added to the configuration block.
 
 ## Install services
 

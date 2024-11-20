@@ -24,7 +24,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
 
     public function __construct(
         private readonly BootManagerInterface $bootManager,
-        private readonly ZeroContextInterface $zeroContext
+        private readonly ZeroContextInterface $zeroContext,
     ) {}
 
     /**
@@ -68,6 +68,10 @@ final class PackageInstallerDefault implements PackageInstallerInterface
             } else {
                 throw new \RuntimeException("Bootloaders or Groups must be defined for package {$this->packageName}");
             }
+
+            if (!empty($installerConfig[self::PACKAGE][self::MAIN_CONFIG])) {
+                $this->appendMainConfig($installerConfig[self::PACKAGE][self::MAIN_CONFIG]);
+            }
         }
 
         if (!empty($installerConfig[self::SERVICES]) && \is_array($installerConfig[self::SERVICES])) {
@@ -102,7 +106,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
                 $this->zeroContext->getApplicationDirectory(),
                 InstallerApplication::APP_CODE,
                 InstallerApplication::class,
-                [EngineRolesEnum::CONSOLE->value]
+                [EngineRolesEnum::CONSOLE->value],
             );
 
             $application            = $runner->run();
@@ -139,7 +143,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
                 runtimeTags : $group[self::RUNTIME_TAGS] ?? [],
                 excludeTags : $group[self::EXCLUDE_TAGS] ?? [],
                 isActive    : $group[self::IS_ACTIVE] ?? true,
-                group       : $group[self::GROUP] ?? null
+                group       : $group[self::GROUP] ?? null,
             );
         }
 
@@ -167,7 +171,7 @@ final class PackageInstallerDefault implements PackageInstallerInterface
                 isActive     : $serviceConfig[Service::IS_ACTIVE]   ?? false,
                 config       : $serviceConfig[Service::CONFIG]      ?? [],
                 includeTags  : $serviceConfig[Service::TAGS]        ?? [],
-                excludeTags  : $serviceConfig[Service::EXCLUDE_TAGS] ?? []
+                excludeTags  : $serviceConfig[Service::EXCLUDE_TAGS] ?? [],
             );
 
             if ($isUpdate) {
@@ -197,6 +201,35 @@ final class PackageInstallerDefault implements PackageInstallerInterface
             } catch (\Exception $exception) {
                 echo "Error uninstalling service $serviceName: {$exception->getMessage()}\n";
             }
+        }
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $mainConfig
+     * @throws \Throwable
+     */
+    private function appendMainConfig(array $mainConfig): void
+    {
+        $configurator               = $this->getInstaller()->findMainConfigAppender();
+
+        if ($configurator === null) {
+            return;
+        }
+
+        foreach ($mainConfig as $section => $data) {
+
+            if (!\is_array($data)) {
+                continue;
+            }
+
+            $config                 = $data[self::CONFIG] ?? null;
+            $comment                = $data[self::COMMENT] ?? '';
+
+            if ($config === null) {
+                continue;
+            }
+
+            $configurator->appendSectionIfNotExists($section, $config, $comment);
         }
     }
 }
